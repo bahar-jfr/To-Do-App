@@ -9,13 +9,13 @@
   <body>
     <section>
       <header class="flex justify-between bg-dark_purple text-white p-4">
-        <div class="flex items-center gap-3 ">
+        <div class="flex items-center gap-3">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="16"
             height="16"
             fill="currentColor"
-            class="bi bi-list-ul size-6 "
+            class="bi bi-list-ul size-6"
             viewBox="0 0 16 16"
           >
             <path
@@ -26,20 +26,26 @@
           <p class="text-xl">My To-Do Tasks</p>
         </div>
         <div class="flex items-center gap-5">
-          <div class="flex items-center bg-light_purple px-4 py-2 rounded-sm gap-2">
+          <div
+            class="flex items-center bg-light_purple px-4 py-2 rounded-sm gap-2"
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="16"
               height="16"
               fill="currentColor"
-              class="bi bi-search "
+              class="bi bi-search"
               viewBox="0 0 16 16"
             >
               <path
                 d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"
               />
             </svg>
-            <input class="bg-transparent outline-none" type="text" placeholder="Search"/>
+            <input
+              class="bg-transparent outline-none"
+              type="text"
+              placeholder="Search"
+            />
           </div>
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -68,14 +74,19 @@
         </div>
       </header>
       <main>
-        <table>
-          <tr>
-            <th>Task Name</th>
-            <th>Priority</th>
-            <th>Status</th>
-            <th>Deadline</th>
-            <th>Actions</th>
-          </tr>
+        <table class="border-2 border-collapse w-full">
+          <thead>
+            <tr>
+              <th class="border-2 py-3 w-1/5 font-semibold">Task Name</th>
+              <th class="border-2 py-3 w-1/5 font-semibold">Priority</th>
+              <th class="border-2 py-3 w-1/5 font-semibold">Status</th>
+              <th class="border-2 py-3 w-1/5 font-semibold">Deadline</th>
+              <th class="border-2 py-3 w-1/5 font-semibold">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!--task items goes here-->
+          </tbody>
         </table>
       </main>
     </section>
