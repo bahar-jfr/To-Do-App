@@ -1,3 +1,5 @@
+const allInfoArray = [];
+
 // Get Elements
 const plusIcon = document.getElementById("plus_icon");
 const modal = document.getElementById("modal");
@@ -6,12 +8,6 @@ const submitBtn = document.getElementById("submit_btn");
 
 // Events
 submitBtn.addEventListener("click", addNewTask);
-
-function addNewTask() {
-  const taskName = document.getElementById("task_name").value;
-  const taskPriority = document.getElementById("task_priority").value;
-  const taskStatus = document.getElementById("task_status").value;
-}
 
 // Open modal
 plusIcon.addEventListener("click", openModal);
@@ -26,3 +22,29 @@ function closeModal() {
   overlay.style.display = "none";
   modal.style.display = "none";
 }
+
+// Add new task's data to localstorage
+function addNewTask() {
+    const taskName = document.getElementById("task_name");
+    const taskPriority = document.getElementById("task_priority").value;
+    const taskStatus = document.getElementById("task_status").value;
+  
+    const userObject = {
+      id: Date.now(),
+      name: taskName.value,
+      priority: taskPriority,
+      status: taskStatus,
+    };
+  
+    allInfoArray.push(userObject);
+  
+    localStorage.setItem("task", JSON.stringify(allInfoArray));
+  
+    taskName.value = "";
+  }
+
+  const tasks = JSON.parse(localStorage.getItem("task"));
+  tasks.forEach(item => {
+    
+  });
+  
