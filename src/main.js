@@ -30,7 +30,10 @@ function addNewTask() {
   const taskName = document.getElementById("task_name");
   const taskPriority = document.getElementById("task_priority").value;
   const taskStatus = document.getElementById("task_status").value;
-  tabelBody.innerHTML = ""
+  let div;
+
+  // Reset the table bode
+  tabelBody.innerHTML = "";
 
   const userObject = {
     id: Date.now(),
@@ -43,26 +46,46 @@ function addNewTask() {
 
   localStorage.setItem("task", JSON.stringify(allInfoArray));
 
+  // Reset input
   taskName.value = "";
 
   const tasks = JSON.parse(localStorage.getItem("task"));
+
+  // Create tr
   tasks.forEach((item) => {
     const row = document.createElement("tr");
 
+    // Create td
     userObjectKeys.forEach((key) => {
       const cell = document.createElement("td");
+      cell.className = "border-2 py-3 w-1/5 text-center  relative";
+
       if (key === "deadline") {
         cell.innerText = "date";
       } else if (key === "action") {
         cell.innerText = "action";
-      } else {
+      } else if (key === "name") {
         cell.innerText = item[key];
+      } else {
+        div = document.createElement("div");
+        div.innerText = item[key];
+
+        // Set style for option content
+        if (item[key] === "Todo" || item[key] === "High") {
+          div.className = "bg-pink text-white option ";
+        } else if (item[key] === "Medium" || item[key] === "Doing") {
+          div.className = "bg-yellow option ";
+        } else if (item[key] === "Low") {
+          div.className = "bg-light_gray option ";
+        } else {
+          div.className = "bg-green text-white option";
+        }
+        cell.append(div);
       }
+
       row.append(cell);
-      console.log(key);
     });
 
     tabelBody.append(row);
   });
-
 }

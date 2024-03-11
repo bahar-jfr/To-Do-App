@@ -13,6 +13,10 @@ module.exports = {
         green: "#2e7d32",
         black_overlay: "#120d0d",
       },
+      spacing: {
+        "42%": "42%",
+        "38%": "38%",
+      },
     },
   },
   plugins: [],
