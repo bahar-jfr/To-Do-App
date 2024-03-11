@@ -11,6 +11,7 @@ module.exports = {
         pink: "#dc3545",
         yellow: "#ffc107",
         green: "#2e7d32",
+        black_overlay: "#120d0d",
       },
     },
   },
