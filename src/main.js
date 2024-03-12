@@ -30,10 +30,6 @@ function addNewTask() {
   const taskName = document.getElementById("task_name");
   const taskPriority = document.getElementById("task_priority").value;
   const taskStatus = document.getElementById("task_status").value;
-  let div;
-
-  // Reset the table bode
-  tabelBody.innerHTML = "";
 
   const userObject = {
     id: Date.now(),
@@ -53,7 +49,11 @@ function addNewTask() {
 
 // Create render function
 function renderTasks() {
+  // Reset the table bode
+  tabelBody.innerHTML = "";
+
   const tasks = JSON.parse(localStorage.getItem("task"));
+  let div;
 
   // Create tr
   tasks.forEach((item, index) => {
@@ -95,11 +95,12 @@ function renderTasks() {
 }
 
 // Create action icons
-function createActions(cell) {
+function createActions(cell, index) {
   const trashDiv = document.createElement("div");
   trashDiv.className = "bg-pink w-fit px-2 py-1  rounded-md";
   const trashIcon = document.createElement("img");
   trashIcon.src = "./assets/images/ion--trash-sharp.svg";
+  trashDiv.addEventListener("click", () => deleteTask(index));
 
   const editDiv = document.createElement("div");
   editDiv.className = "bg-blue w-fit px-2 py-1  rounded-md ";
@@ -115,4 +116,11 @@ function createActions(cell) {
   editDiv.append(editIcon);
   trashDiv.append(trashIcon);
   cell.append(trashDiv, editDiv, eyeDiv);
+}
+
+// Delete from tr and localstorage
+function deleteTask(index) {
+  allInfoArray.splice(index, 1);
+  localStorage.setItem("task", JSON.stringify(allInfoArray));
+  renderTasks();
 }
