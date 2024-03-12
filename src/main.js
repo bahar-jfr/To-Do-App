@@ -58,21 +58,24 @@ function renderTasks() {
   // Create tr
   tasks.forEach((item, index) => {
     const row = document.createElement("tr");
+    row.className = "border-collapse border-2";
     row.id = item.id;
 
     // Create td
     userObjectKeys.forEach((key) => {
       const cell = document.createElement("td");
-      cell.className = "border-2 py-3 w-1/5 text-center relative";
+      cell.className = " py-3 w-1/5 text-center relative";
 
       if (key === "deadline") {
+        cell.className = "border-x-2  py-3 w-1/5 text-center relative";
         cell.innerText = "date";
       } else if (key === "action") {
-        cell.className = "flex justify-center  py-3 gap-2";
+        cell.className = "flex justify-center gap-2 py-3 ";
         createActions(cell, index);
       } else if (key === "name") {
         cell.innerText = item[key];
       } else {
+        cell.className = "py-3 w-1/5 text-center relative border-x-2";
         div = document.createElement("div");
         div.innerText = item[key];
         // Set style for option content
