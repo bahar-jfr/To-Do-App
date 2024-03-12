@@ -54,22 +54,21 @@ function addNewTask() {
   // Create tr
   tasks.forEach((item) => {
     const row = document.createElement("tr");
-
     // Create td
     userObjectKeys.forEach((key) => {
       const cell = document.createElement("td");
-      cell.className = "border-2 py-3 w-1/5 text-center  relative";
+      cell.className = "border-2 py-3 w-1/5 text-center relative";
 
       if (key === "deadline") {
         cell.innerText = "date";
       } else if (key === "action") {
-        cell.innerText = "action";
+        cell.className = "flex justify-center  py-3 gap-2";
+        createActions(cell);
       } else if (key === "name") {
         cell.innerText = item[key];
       } else {
         div = document.createElement("div");
         div.innerText = item[key];
-
         // Set style for option content
         if (item[key] === "Todo" || item[key] === "High") {
           div.className = "bg-pink text-white option ";
@@ -82,10 +81,30 @@ function addNewTask() {
         }
         cell.append(div);
       }
-
       row.append(cell);
     });
 
     tabelBody.append(row);
   });
+}
+function createActions(cell) {
+  const trashDiv = document.createElement("div");
+  trashDiv.className = "bg-pink w-fit px-2 py-1  rounded-md";
+  const trashIcon = document.createElement("img");
+  trashIcon.src = "./assets/images/ion--trash-sharp.svg";
+
+  const editDiv = document.createElement("div");
+  editDiv.className = "bg-blue w-fit px-2 py-1  rounded-md ";
+  const editIcon = document.createElement("img");
+  editIcon.src = "./assets/images/mdi--edit.svg";
+
+  const eyeDiv = document.createElement("div");
+  eyeDiv.className = "bg-dark_gray w-fit px-2 py-1  rounded-md ";
+  const eyeIcon = document.createElement("img");
+  eyeIcon.src = "./assets/images/ion--eye.svg";
+
+  eyeDiv.append(eyeIcon);
+  editDiv.append(editIcon);
+  trashDiv.append(trashIcon);
+  cell.append(trashDiv, editDiv, eyeDiv);
 }
