@@ -48,12 +48,18 @@ function addNewTask() {
 
   // Reset input
   taskName.value = "";
+  renderTasks();
+}
 
+// Create render function
+function renderTasks() {
   const tasks = JSON.parse(localStorage.getItem("task"));
 
   // Create tr
-  tasks.forEach((item) => {
+  tasks.forEach((item, index) => {
     const row = document.createElement("tr");
+    row.id = item.id;
+
     // Create td
     userObjectKeys.forEach((key) => {
       const cell = document.createElement("td");
@@ -63,7 +69,7 @@ function addNewTask() {
         cell.innerText = "date";
       } else if (key === "action") {
         cell.className = "flex justify-center  py-3 gap-2";
-        createActions(cell);
+        createActions(cell, index);
       } else if (key === "name") {
         cell.innerText = item[key];
       } else {
@@ -87,6 +93,8 @@ function addNewTask() {
     tabelBody.append(row);
   });
 }
+
+// Create action icons
 function createActions(cell) {
   const trashDiv = document.createElement("div");
   trashDiv.className = "bg-pink w-fit px-2 py-1  rounded-md";
