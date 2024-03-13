@@ -7,6 +7,13 @@ const modal = document.getElementById("modal");
 const overlay = document.getElementById("overlay");
 const submitBtn = document.getElementById("submit_btn");
 const tabelBody = document.getElementById("table_body");
+const showTaskModal = document.getElementById("show_task_modal");
+
+// Create Elements for eyeIcon's modal
+const taskNameDiv = document.createElement("div");
+const priorityDiv = document.createElement("div");
+const statusDiv = document.createElement("div");
+const headerModal = document.createElement("div")
 
 // Events
 submitBtn.addEventListener("click", addNewTask);
@@ -23,6 +30,7 @@ overlay.addEventListener("click", closeModal);
 function closeModal() {
   overlay.style.display = "none";
   modal.style.display = "none";
+  showTaskModal.style.display = "none";
 }
 
 // Add new task's data to localstorage
@@ -103,7 +111,6 @@ function createActions(cell, index) {
   trashDiv.className = "bg-pink w-fit px-2 py-1  rounded-md";
   const trashIcon = document.createElement("img");
   trashIcon.src = "./assets/images/ion--trash-sharp.svg";
-  trashDiv.addEventListener("click", () => deleteTask(index));
 
   const editDiv = document.createElement("div");
   editDiv.className = "bg-blue w-fit px-2 py-1  rounded-md ";
@@ -114,6 +121,10 @@ function createActions(cell, index) {
   eyeDiv.className = "bg-dark_gray w-fit px-2 py-1  rounded-md ";
   const eyeIcon = document.createElement("img");
   eyeIcon.src = "./assets/images/ion--eye.svg";
+
+  // Add event to icons
+  trashDiv.addEventListener("click", () => deleteTask(index));
+  eyeDiv.addEventListener("click", () => showTask(index));
 
   eyeDiv.append(eyeIcon);
   editDiv.append(editIcon);
@@ -126,4 +137,25 @@ function deleteTask(index) {
   allInfoArray.splice(index, 1);
   localStorage.setItem("task", JSON.stringify(allInfoArray));
   renderTasks();
+}
+
+// See task info
+function showTask(index) {
+  headerModal.innerHTML= "Show Task"
+  taskNameDiv.innerHTML = allInfoArray[index].name;
+  priorityDiv.innerHTML = allInfoArray[index].priority;
+  statusDiv.innerHTML = allInfoArray[index].status;
+
+  headerModal.className= "font-semibold text-3xl text-dark_purple mb-8 mt-4"
+  taskNameDiv.className =
+    "p-2 bg-white border-dark_purple border-2 rounded-md mb-4";
+  priorityDiv.className =
+    "p-2 bg-white border-dark_purple border-2 rounded-md mb-4";
+  statusDiv.className =
+    "p-2 bg-white border-dark_purple border-2 rounded-md mb-4";
+
+  showTaskModal.append(headerModal,taskNameDiv, priorityDiv, statusDiv);
+
+  overlay.style.display = "block";
+  showTaskModal.style.display = "block";
 }
