@@ -8,12 +8,17 @@ const overlay = document.getElementById("overlay");
 const submitBtn = document.getElementById("submit_btn");
 const tabelBody = document.getElementById("table_body");
 const showTaskModal = document.getElementById("show_task_modal");
+const taskName = document.getElementById("task_name");
+const taskPriority = document.getElementById("task_priority");
+const taskStatus = document.getElementById("task_status");
+const headerModal = document.getElementById("header_modal");
+const updateBtn = document.getElementById("update_btn");
 
 // Create Elements for eyeIcon's modal
 const taskNameDiv = document.createElement("div");
 const priorityDiv = document.createElement("div");
 const statusDiv = document.createElement("div");
-const headerModal = document.createElement("div")
+const headerShowModal = document.createElement("div");
 
 // Events
 submitBtn.addEventListener("click", addNewTask);
@@ -23,6 +28,7 @@ plusIcon.addEventListener("click", openModal);
 function openModal() {
   modal.style.display = "block";
   overlay.style.display = " block";
+  taskName.value = "";
 }
 
 // Close modal
@@ -35,15 +41,11 @@ function closeModal() {
 
 // Add new task's data to localstorage
 function addNewTask() {
-  const taskName = document.getElementById("task_name");
-  const taskPriority = document.getElementById("task_priority").value;
-  const taskStatus = document.getElementById("task_status").value;
-
   const userObject = {
     id: Date.now(),
     name: taskName.value,
-    priority: taskPriority,
-    status: taskStatus,
+    priority: taskPriority.value,
+    status: taskStatus.value,
   };
 
   allInfoArray.push(userObject);
@@ -125,6 +127,7 @@ function createActions(cell, index) {
   // Add event to icons
   trashDiv.addEventListener("click", () => deleteTask(index));
   eyeDiv.addEventListener("click", () => showTask(index));
+  editDiv.addEventListener("click", () => editTask(index));
 
   eyeDiv.append(eyeIcon);
   editDiv.append(editIcon);
@@ -141,12 +144,13 @@ function deleteTask(index) {
 
 // See task info
 function showTask(index) {
-  headerModal.innerHTML= "Show Task"
+  headerShowModal.innerHTML = "Show Task";
   taskNameDiv.innerHTML = allInfoArray[index].name;
   priorityDiv.innerHTML = allInfoArray[index].priority;
   statusDiv.innerHTML = allInfoArray[index].status;
 
-  headerModal.className= "font-semibold text-3xl text-dark_purple mb-8 mt-4"
+  headerShowModal.className =
+    "font-semibold text-3xl text-dark_purple mb-8 mt-4";
   taskNameDiv.className =
     "p-2 bg-white border-dark_purple border-2 rounded-md mb-4";
   priorityDiv.className =
@@ -154,8 +158,67 @@ function showTask(index) {
   statusDiv.className =
     "p-2 bg-white border-dark_purple border-2 rounded-md mb-4";
 
-  showTaskModal.append(headerModal,taskNameDiv, priorityDiv, statusDiv);
+  showTaskModal.append(headerShowModal, taskNameDiv, priorityDiv, statusDiv);
 
   overlay.style.display = "block";
   showTaskModal.style.display = "block";
+}
+
+// Edit task info
+function editTask(index) {
+  function updateTask() {
+    allInfoArray[index].name = taskName.value;
+    allInfoArray[index].priority = taskPriority.value;
+    allInfoArray[index].status = taskStatus.value;
+    overlay.style.display = "none";
+    modal.style.display = "none";
+    localStorage.setItem("task", JSON.stringify(allInfoArray));
+    // Reset input
+    taskName.value = "";
+    renderTasks();
+  }
+
+  updateBtn.removeEventListener("click", updateTask);
+  updateBtn.addEventListener("click", updateTask);
+
+  taskName.value = allInfoArray[index].name;
+  taskPriority.value = allInfoArray[index].priority;
+  taskStatus.value = allInfoArray[index].status;
+
+  headerModal.innerHTML = "Edit Task";
+  overlay.style.display = "block";
+  modal.style.display = "block";
+  submitBtn.style.display = "none";
+  updateBtn.style.display = "block";
+}
+
+function editTask(index) {
+  // اولین قدم: حذف listener های قبلی
+  updateBtn.removeEventListener("click", previousUpdateListener);
+
+  // تابع قبلی update را ذخیره کنید تا بتوانید آن را حذف کنید
+  function previousUpdateListener() {
+    allInfoArray[index].name = taskName.value;
+    allInfoArray[index].priority = taskPriority.value;
+    allInfoArray[index].status = taskStatus.value;
+    overlay.style.display = "none";
+    modal.style.display = "none";
+    localStorage.setItem("task", JSON.stringify(allInfoArray));
+    // Reset input
+    taskName.value = "";
+    renderTasks();
+  }
+
+  // اضافه کردن listener جدید
+  updateBtn.addEventListener("click", previousUpdateListener);
+
+  taskName.value = allInfoArray[index].name;
+  taskPriority.value = allInfoArray[index].priority;
+  taskStatus.value = allInfoArray[index].status;
+
+  headerModal.innerHTML = "Edit Task";
+  overlay.style.display = "block";
+  modal.style.display = "block";
+  submitBtn.style.display = "none";
+  updateBtn.style.display = "block";
 }
