@@ -1,8 +1,3 @@
-let allInfoArray = [];
-const userObjectKeys = ["name", "priority", "status", "deadline", "action"];
-let isEdit = false;
-let itemId;
-
 // Get Elements
 const plusIcon = document.getElementById("plus_icon");
 const modal = document.getElementById("modal");
@@ -21,6 +16,14 @@ const taskNameDiv = document.createElement("div");
 const priorityDiv = document.createElement("div");
 const statusDiv = document.createElement("div");
 const headerShowModal = document.createElement("div");
+
+let allInfoArray = JSON.parse(localStorage.getItem("task")) || [];
+const userObjectKeys = ["name", "priority", "status", "deadline", "action"];
+let isEdit = false;
+let itemId;
+if (allInfoArray.length != 0) {
+  renderTasks(allInfoArray);
+}
 
 // Events
 submitBtn.addEventListener("click", addNewTask);
@@ -57,18 +60,17 @@ function addNewTask() {
 
     // Reset input
     taskName.value = "";
-    renderTasks();
+    renderTasks(allInfoArray);
   } else {
     updateTask(itemId);
   }
 }
 
 // Create render function
-function renderTasks() {
+function renderTasks(allInfoArray) {
   // Reset the table bode
   tabelBody.innerHTML = "";
 
-  allInfoArray = JSON.parse(localStorage.getItem("task")) || [];
   let div;
 
   // Create tr
@@ -149,7 +151,7 @@ function deleteTask(e) {
   localStorage.setItem("task", JSON.stringify(allInfoArray));
 
   // re-render list items with new items that removed selected item
-  renderTasks();
+  renderTasks(allInfoArray);
 }
 
 // See task info
@@ -201,7 +203,7 @@ function updateTask(e) {
   modal.style.display = "none";
   localStorage.setItem("task", JSON.stringify(allInfoArray));
   // Reset input
-  renderTasks();
+  renderTasks(allInfoArray);
   taskName.value = "";
   isEdit = false;
 }
