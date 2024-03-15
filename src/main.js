@@ -9,7 +9,6 @@ const taskName = document.getElementById("task_name");
 const taskPriority = document.getElementById("task_priority");
 const taskStatus = document.getElementById("task_status");
 const headerModal = document.getElementById("header_modal");
-const updateBtn = document.getElementById("update_btn");
 
 // Create Elements for eyeIcon's modal
 const taskNameDiv = document.createElement("div");
@@ -62,7 +61,7 @@ function addNewTask() {
     taskName.value = "";
     renderTasks(allInfoArray);
   } else {
-    updateTask(itemId);
+    editTask(itemId);
   }
 }
 
@@ -135,7 +134,7 @@ function createActions(cell, index, id) {
   // Add event to icons
   trashDiv.addEventListener("click", () => deleteTask(id));
   eyeDiv.addEventListener("click", () => showTask(index));
-  editDiv.addEventListener("click", () => editTask(id));
+  editDiv.addEventListener("click", () => handelEditTask(id));
 
   eyeDiv.append(eyeIcon);
   editDiv.append(editIcon);
@@ -177,7 +176,7 @@ function showTask(index) {
 }
 
 // Edit task info
-function editTask(id) {
+function handelEditTask(id) {
   const findItem = allInfoArray.find((item) => item.id == id);
 
   taskName.value = findItem.name;
@@ -187,13 +186,10 @@ function editTask(id) {
   headerModal.innerHTML = "Edit Task";
   overlay.style.display = "block";
   modal.style.display = "block";
-  /*   submitBtn.style.display = "none";
-  updateBtn.style.display = "block";
-  updateBtn.addEventListener("click" ,()=>updateTask(findItem)) */
   itemId = findItem;
   isEdit = true;
 }
-function updateTask(e) {
+function editTask(e) {
   const findItem = allInfoArray.find((item) => item.id == e.id);
   console.log(findItem);
   findItem.name = taskName.value;
@@ -202,8 +198,8 @@ function updateTask(e) {
   overlay.style.display = "none";
   modal.style.display = "none";
   localStorage.setItem("task", JSON.stringify(allInfoArray));
-  // Reset input
   renderTasks(allInfoArray);
+  // Reset input
   taskName.value = "";
   isEdit = false;
 }
