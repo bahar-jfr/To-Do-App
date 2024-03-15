@@ -8,6 +8,7 @@ const showTaskModal = document.getElementById("show_task_modal");
 const taskName = document.getElementById("task_name");
 const taskPriority = document.getElementById("task_priority");
 const taskStatus = document.getElementById("task_status");
+const taskDate = document.getElementById("task_date");
 const headerModal = document.getElementById("header_modal");
 
 // Create Elements for eyeIcon's modal
@@ -51,6 +52,7 @@ function addNewTask() {
       name: taskName.value,
       priority: taskPriority.value,
       status: taskStatus.value,
+      deadline: taskDate.value,
     };
 
     allInfoArray.push(userObject);
@@ -85,7 +87,10 @@ function renderTasks(allInfoArray) {
 
       if (key === "deadline") {
         cell.className = "border-x-2  py-3 w-1/5 text-center relative";
-        cell.innerText = "date";
+        div = document.createElement("div")
+        div.innerText = item[key];
+        cell.append(div);
+        div.className= "border-2 border-blue rounded-2xl w-32 ml-20"
       } else if (key === "action") {
         cell.className = "flex justify-center gap-2 py-3 ";
         createActions(cell, index, row.id);
@@ -182,8 +187,10 @@ function handelEditTask(id) {
   taskName.value = findItem.name;
   taskPriority.value = findItem.priority;
   taskStatus.value = findItem.status;
+  taskDate.value = findItem.deadline;
 
   headerModal.innerHTML = "Edit Task";
+  submitBtn.innerText = "Update";
   overlay.style.display = "block";
   modal.style.display = "block";
   itemId = findItem;
@@ -191,12 +198,15 @@ function handelEditTask(id) {
 }
 function editTask(e) {
   const findItem = allInfoArray.find((item) => item.id == e.id);
-  console.log(findItem);
+
   findItem.name = taskName.value;
   findItem.priority = taskPriority.value;
   findItem.status = taskStatus.value;
+  findItem.deadline = taskDate.value;
+
   overlay.style.display = "none";
   modal.style.display = "none";
+
   localStorage.setItem("task", JSON.stringify(allInfoArray));
   renderTasks(allInfoArray);
   // Reset input
