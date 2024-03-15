@@ -1,5 +1,7 @@
 let allInfoArray = [];
 const userObjectKeys = ["name", "priority", "status", "deadline", "action"];
+let isEdit = false;
+let itemId;
 
 // Get Elements
 const plusIcon = document.getElementById("plus_icon");
@@ -41,20 +43,24 @@ function closeModal() {
 
 // Add new task's data to localstorage
 function addNewTask() {
-  const userObject = {
-    id: Date.now(),
-    name: taskName.value,
-    priority: taskPriority.value,
-    status: taskStatus.value,
-  };
+  if (!isEdit) {
+    const userObject = {
+      id: Date.now(),
+      name: taskName.value,
+      priority: taskPriority.value,
+      status: taskStatus.value,
+    };
 
-  allInfoArray.push(userObject);
+    allInfoArray.push(userObject);
 
-  localStorage.setItem("task", JSON.stringify(allInfoArray));
+    localStorage.setItem("task", JSON.stringify(allInfoArray));
 
-  // Reset input
-  taskName.value = "";
-  renderTasks();
+    // Reset input
+    taskName.value = "";
+    renderTasks();
+  } else {
+    updateTask(itemId);
+  }
 }
 
 // Create render function
@@ -81,7 +87,7 @@ function renderTasks() {
         cell.innerText = "date";
       } else if (key === "action") {
         cell.className = "flex justify-center gap-2 py-3 ";
-        createActions(cell, index,row.id);
+        createActions(cell, index, row.id);
       } else if (key === "name") {
         cell.innerText = item[key];
       } else {
@@ -108,7 +114,7 @@ function renderTasks() {
 }
 
 // Create action icons
-function createActions(cell, index,id) {
+function createActions(cell, index, id) {
   const trashDiv = document.createElement("div");
   trashDiv.className = "bg-pink w-fit px-2 py-1  rounded-md";
   const trashIcon = document.createElement("img");
@@ -127,7 +133,7 @@ function createActions(cell, index,id) {
   // Add event to icons
   trashDiv.addEventListener("click", () => deleteTask(id));
   eyeDiv.addEventListener("click", () => showTask(index));
-  editDiv.addEventListener("click", () => editTask(index));
+  editDiv.addEventListener("click", () => editTask(id));
 
   eyeDiv.append(eyeIcon);
   editDiv.append(editIcon);
@@ -169,29 +175,33 @@ function showTask(index) {
 }
 
 // Edit task info
-function editTask(index) {
-  
-    allInfoArray[index].name = taskName.value;
-    allInfoArray[index].priority = taskPriority.value;
-    allInfoArray[index].status = taskStatus.value;
-    overlay.style.display = "none";
-    modal.style.display = "none";
-    localStorage.setItem("task", JSON.stringify(allInfoArray));
-    // Reset input
-    taskName.value = "";
-    renderTasks();
-  
+function editTask(id) {
+  const findItem = allInfoArray.find((item) => item.id == id);
 
-  updateBtn.removeEventListener("click", updateTask);
-  updateBtn.addEventListener("click", updateTask);
-
-  taskName.value = allInfoArray[index].name;
-  taskPriority.value = allInfoArray[index].priority;
-  taskStatus.value = allInfoArray[index].status;
+  taskName.value = findItem.name;
+  taskPriority.value = findItem.priority;
+  taskStatus.value = findItem.status;
 
   headerModal.innerHTML = "Edit Task";
   overlay.style.display = "block";
   modal.style.display = "block";
-  submitBtn.style.display = "none";
+  /*   submitBtn.style.display = "none";
   updateBtn.style.display = "block";
+  updateBtn.addEventListener("click" ,()=>updateTask(findItem)) */
+  itemId = findItem;
+  isEdit = true;
+}
+function updateTask(e) {
+  const findItem = allInfoArray.find((item) => item.id == e.id);
+  console.log(findItem);
+  findItem.name = taskName.value;
+  findItem.priority = taskPriority.value;
+  findItem.status = taskStatus.value;
+  overlay.style.display = "none";
+  modal.style.display = "none";
+  localStorage.setItem("task", JSON.stringify(allInfoArray));
+  // Reset input
+  renderTasks();
+  taskName.value = "";
+  isEdit = false;
 }
