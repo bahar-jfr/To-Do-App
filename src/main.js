@@ -1,4 +1,4 @@
-const allInfoArray = [];
+let allInfoArray = [];
 const userObjectKeys = ["name", "priority", "status", "deadline", "action"];
 
 // Get Elements
@@ -62,11 +62,11 @@ function renderTasks() {
   // Reset the table bode
   tabelBody.innerHTML = "";
 
-  const tasks = JSON.parse(localStorage.getItem("task"));
+  allInfoArray = JSON.parse(localStorage.getItem("task")) || [];
   let div;
 
   // Create tr
-  tasks.forEach((item, index) => {
+  allInfoArray.forEach((item, index) => {
     const row = document.createElement("tr");
     row.className = "border-collapse border-2";
     row.id = item.id;
@@ -81,7 +81,7 @@ function renderTasks() {
         cell.innerText = "date";
       } else if (key === "action") {
         cell.className = "flex justify-center gap-2 py-3 ";
-        createActions(cell, index);
+        createActions(cell, index,row.id);
       } else if (key === "name") {
         cell.innerText = item[key];
       } else {
@@ -108,7 +108,7 @@ function renderTasks() {
 }
 
 // Create action icons
-function createActions(cell, index) {
+function createActions(cell, index,id) {
   const trashDiv = document.createElement("div");
   trashDiv.className = "bg-pink w-fit px-2 py-1  rounded-md";
   const trashIcon = document.createElement("img");
@@ -125,7 +125,7 @@ function createActions(cell, index) {
   eyeIcon.src = "./assets/images/ion--eye.svg";
 
   // Add event to icons
-  trashDiv.addEventListener("click", () => deleteTask(index));
+  trashDiv.addEventListener("click", () => deleteTask(id));
   eyeDiv.addEventListener("click", () => showTask(index));
   editDiv.addEventListener("click", () => editTask(index));
 
@@ -135,10 +135,14 @@ function createActions(cell, index) {
   cell.append(trashDiv, editDiv, eyeDiv);
 }
 
-// Delete from tr and localstorage
-function deleteTask(index) {
-  allInfoArray.splice(index, 1);
+// Delete task from tr and localstorage
+function deleteTask(e) {
+  // filter list items from item that i want to delete
+  allInfoArray = allInfoArray.filter((item) => item.id != e);
+
   localStorage.setItem("task", JSON.stringify(allInfoArray));
+
+  // re-render list items with new items that removed selected item
   renderTasks();
 }
 
@@ -166,7 +170,7 @@ function showTask(index) {
 
 // Edit task info
 function editTask(index) {
-  function updateTask() {
+  
     allInfoArray[index].name = taskName.value;
     allInfoArray[index].priority = taskPriority.value;
     allInfoArray[index].status = taskStatus.value;
@@ -176,41 +180,10 @@ function editTask(index) {
     // Reset input
     taskName.value = "";
     renderTasks();
-  }
+  
 
   updateBtn.removeEventListener("click", updateTask);
   updateBtn.addEventListener("click", updateTask);
-
-  taskName.value = allInfoArray[index].name;
-  taskPriority.value = allInfoArray[index].priority;
-  taskStatus.value = allInfoArray[index].status;
-
-  headerModal.innerHTML = "Edit Task";
-  overlay.style.display = "block";
-  modal.style.display = "block";
-  submitBtn.style.display = "none";
-  updateBtn.style.display = "block";
-}
-
-function editTask(index) {
-  // اولین قدم: حذف listener های قبلی
-  updateBtn.removeEventListener("click", previousUpdateListener);
-
-  // تابع قبلی update را ذخیره کنید تا بتوانید آن را حذف کنید
-  function previousUpdateListener() {
-    allInfoArray[index].name = taskName.value;
-    allInfoArray[index].priority = taskPriority.value;
-    allInfoArray[index].status = taskStatus.value;
-    overlay.style.display = "none";
-    modal.style.display = "none";
-    localStorage.setItem("task", JSON.stringify(allInfoArray));
-    // Reset input
-    taskName.value = "";
-    renderTasks();
-  }
-
-  // اضافه کردن listener جدید
-  updateBtn.addEventListener("click", previousUpdateListener);
 
   taskName.value = allInfoArray[index].name;
   taskPriority.value = allInfoArray[index].priority;
