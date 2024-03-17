@@ -91,7 +91,7 @@ function renderTasks(allInfoArray) {
         div = document.createElement("div");
         div.innerText = item[key];
         cell.append(div);
-        div.className = "border-2 border-blue rounded-2xl w-32 ml-20";
+        div.className = "border-2 border-blue rounded-2xl w-32 md:ml-20";
       } else if (key === "action") {
         cell.className = "flex justify-center gap-2 py-3 ";
         createActions(cell, index, row.id);
@@ -122,7 +122,6 @@ function renderTasks(allInfoArray) {
 
 // Create action icons
 function createActions(cell, index, id) {
-
   const iconsData = [
     {
       class: "bg-pink",
@@ -143,7 +142,7 @@ function createActions(cell, index, id) {
 
   iconsData.forEach((item) => {
     const element = document.createElement("div");
-    element.className = `w-fit px-2 py-1  rounded-md ${item.class}`;
+    element.className = `w-fit md:px-2  py-1  rounded-md ${item.class}`;
 
     const icon = document.createElement("img");
     icon.src = item.iconSrc;
@@ -151,7 +150,7 @@ function createActions(cell, index, id) {
     if (item.action) {
       element.addEventListener("click", () => item.action(id, index));
     }
-    
+
     element.append(icon);
     cell.append(element);
   });
@@ -200,7 +199,7 @@ function handelEditTask(id) {
 
   headerModal.innerHTML = "Edit Task";
   submitBtn.innerText = "Update";
-  display("block")
+  display("block");
   itemId = findItem;
   isEdit = true;
 }
@@ -213,7 +212,7 @@ function editTask(e) {
   findItem.status = taskStatus.value;
   findItem.deadline = taskDate.value;
 
-display("none")
+  display("none");
 
   localStorage.setItem("task", JSON.stringify(allInfoArray));
   renderTasks(allInfoArray);
@@ -230,7 +229,7 @@ function getTask() {
   return JSON.parse(localStorage.getItem("task")) || [];
 }
 
-function display(mode){
+function display(mode) {
   modal.style.display = `${mode}`;
   overlay.style.display = `${mode}`;
 }
