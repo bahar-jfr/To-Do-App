@@ -164,22 +164,19 @@ function deleteTask(e) {
 // See task info
 function showTask(index) {
   headerShowModal.innerHTML = "Show Task";
-  taskNameDiv.innerHTML = allInfoArray[index].name;
-  priorityDiv.innerHTML = allInfoArray[index].priority;
-  statusDiv.innerHTML = allInfoArray[index].status;
-  dateDiv.innerHTML = allInfoArray[index].deadline;
-
   headerShowModal.className =
     "font-semibold text-3xl text-dark_purple mb-8 mt-4";
-  taskNameDiv.className =
-    "p-2 bg-white border-dark_purple border-2 rounded-md mb-4";
-  priorityDiv.className =
-    "p-2 bg-white border-dark_purple border-2 rounded-md mb-4";
-  statusDiv.className =
-    "p-2 bg-white border-dark_purple border-2 rounded-md mb-4";
-  dateDiv.className =
-    "p-2 bg-white border-dark_purple border-2 rounded-md mb-4";
-  showTaskModal.append(headerShowModal, taskNameDiv, priorityDiv, statusDiv,dateDiv);
+  showTaskModal.append(headerShowModal);
+
+  const modalDivs = [taskNameDiv, priorityDiv, statusDiv, dateDiv];
+  let i = 0;
+  modalDivs.forEach((element) => {
+    element.innerHTML = allInfoArray[index][userObjectKeys[i]];
+    element.className =
+      "p-2 bg-white border-dark_purple border-2 rounded-md mb-4";
+    showTaskModal.append(element);
+    i++;
+  });
 
   overlay.style.display = "block";
   showTaskModal.style.display = "block";
