@@ -32,8 +32,7 @@ submitBtn.addEventListener("click", addNewTask);
 // Open modal
 plusIcon.addEventListener("click", openModal);
 function openModal() {
-  modal.style.display = "block";
-  overlay.style.display = " block";
+  display("block");
   headerModal.innerHTML = "Add New Task";
   submitBtn.innerHTML = "Submit";
   taskName.value = "";
@@ -42,8 +41,7 @@ function openModal() {
 // Close modal
 overlay.addEventListener("click", closeModal);
 function closeModal() {
-  overlay.style.display = "none";
-  modal.style.display = "none";
+  display("none");
   showTaskModal.style.display = "none";
 }
 
@@ -202,8 +200,7 @@ function handelEditTask(id) {
 
   headerModal.innerHTML = "Edit Task";
   submitBtn.innerText = "Update";
-  overlay.style.display = "block";
-  modal.style.display = "block";
+  display("block")
   itemId = findItem;
   isEdit = true;
 }
@@ -216,8 +213,7 @@ function editTask(e) {
   findItem.status = taskStatus.value;
   findItem.deadline = taskDate.value;
 
-  overlay.style.display = "none";
-  modal.style.display = "none";
+display("none")
 
   localStorage.setItem("task", JSON.stringify(allInfoArray));
   renderTasks(allInfoArray);
@@ -232,4 +228,9 @@ function setTask(array) {
 
 function getTask() {
   return JSON.parse(localStorage.getItem("task")) || [];
+}
+
+function display(mode){
+  modal.style.display = `${mode}`;
+  overlay.style.display = `${mode}`;
 }
