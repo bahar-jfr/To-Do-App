@@ -15,9 +15,10 @@ const headerModal = document.getElementById("header_modal");
 const taskNameDiv = document.createElement("div");
 const priorityDiv = document.createElement("div");
 const statusDiv = document.createElement("div");
+const dateDiv = document.createElement("div");
 const headerShowModal = document.createElement("div");
 
-let allInfoArray = JSON.parse(localStorage.getItem("task")) || [];
+let allInfoArray = getTask();
 const userObjectKeys = ["name", "priority", "status", "deadline", "action"];
 let isEdit = false;
 let itemId;
@@ -33,6 +34,8 @@ plusIcon.addEventListener("click", openModal);
 function openModal() {
   modal.style.display = "block";
   overlay.style.display = " block";
+  headerModal.innerHTML = "Add New Task";
+  submitBtn.innerHTML = "Submit";
   taskName.value = "";
 }
 
@@ -57,7 +60,7 @@ function addNewTask() {
 
     allInfoArray.push(userObject);
 
-    localStorage.setItem("task", JSON.stringify(allInfoArray));
+    setTask(allInfoArray);
 
     // Reset input
     taskName.value = "";
@@ -87,10 +90,10 @@ function renderTasks(allInfoArray) {
 
       if (key === "deadline") {
         cell.className = "border-x-2  py-3 w-1/5 text-center relative";
-        div = document.createElement("div")
+        div = document.createElement("div");
         div.innerText = item[key];
         cell.append(div);
-        div.className= "border-2 border-blue rounded-2xl w-32 ml-20"
+        div.className = "border-2 border-blue rounded-2xl w-32 ml-20";
       } else if (key === "action") {
         cell.className = "flex justify-center gap-2 py-3 ";
         createActions(cell, index, row.id);
@@ -152,7 +155,7 @@ function deleteTask(e) {
   // filter list items from item that i want to delete
   allInfoArray = allInfoArray.filter((item) => item.id != e);
 
-  localStorage.setItem("task", JSON.stringify(allInfoArray));
+  setTask(allInfoArray);
 
   // re-render list items with new items that removed selected item
   renderTasks(allInfoArray);
@@ -164,6 +167,7 @@ function showTask(index) {
   taskNameDiv.innerHTML = allInfoArray[index].name;
   priorityDiv.innerHTML = allInfoArray[index].priority;
   statusDiv.innerHTML = allInfoArray[index].status;
+  dateDiv.innerHTML = allInfoArray[index].deadline;
 
   headerShowModal.className =
     "font-semibold text-3xl text-dark_purple mb-8 mt-4";
@@ -173,8 +177,9 @@ function showTask(index) {
     "p-2 bg-white border-dark_purple border-2 rounded-md mb-4";
   statusDiv.className =
     "p-2 bg-white border-dark_purple border-2 rounded-md mb-4";
-
-  showTaskModal.append(headerShowModal, taskNameDiv, priorityDiv, statusDiv);
+  dateDiv.className =
+    "p-2 bg-white border-dark_purple border-2 rounded-md mb-4";
+  showTaskModal.append(headerShowModal, taskNameDiv, priorityDiv, statusDiv,dateDiv);
 
   overlay.style.display = "block";
   showTaskModal.style.display = "block";
@@ -196,6 +201,7 @@ function handelEditTask(id) {
   itemId = findItem;
   isEdit = true;
 }
+
 function editTask(e) {
   const findItem = allInfoArray.find((item) => item.id == e.id);
 
@@ -212,4 +218,12 @@ function editTask(e) {
   // Reset input
   taskName.value = "";
   isEdit = false;
+}
+
+function setTask(array) {
+  localStorage.setItem("task", JSON.stringify(array));
+}
+
+function getTask() {
+  return JSON.parse(localStorage.getItem("task")) || [];
 }
