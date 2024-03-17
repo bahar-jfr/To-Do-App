@@ -124,30 +124,39 @@ function renderTasks(allInfoArray) {
 
 // Create action icons
 function createActions(cell, index, id) {
-  const trashDiv = document.createElement("div");
-  trashDiv.className = "bg-pink w-fit px-2 py-1  rounded-md";
-  const trashIcon = document.createElement("img");
-  trashIcon.src = "./assets/images/ion--trash-sharp.svg";
 
-  const editDiv = document.createElement("div");
-  editDiv.className = "bg-blue w-fit px-2 py-1  rounded-md ";
-  const editIcon = document.createElement("img");
-  editIcon.src = "./assets/images/mdi--edit.svg";
+  const iconsData = [
+    {
+      class: "bg-pink",
+      iconSrc: "./assets/images/ion--trash-sharp.svg",
+      action: (id) => deleteTask(id),
+    },
+    {
+      class: "bg-blue",
+      iconSrc: "./assets/images/mdi--edit.svg",
+      action: (id) => handelEditTask(id),
+    },
+    {
+      class: "bg-dark_gray",
+      iconSrc: "./assets/images/ion--eye.svg",
+      action: (_, index) => showTask(index),
+    },
+  ];
 
-  const eyeDiv = document.createElement("div");
-  eyeDiv.className = "bg-dark_gray w-fit px-2 py-1  rounded-md ";
-  const eyeIcon = document.createElement("img");
-  eyeIcon.src = "./assets/images/ion--eye.svg";
+  iconsData.forEach((item) => {
+    const element = document.createElement("div");
+    element.className = `w-fit px-2 py-1  rounded-md ${item.class}`;
 
-  // Add event to icons
-  trashDiv.addEventListener("click", () => deleteTask(id));
-  eyeDiv.addEventListener("click", () => showTask(index));
-  editDiv.addEventListener("click", () => handelEditTask(id));
+    const icon = document.createElement("img");
+    icon.src = item.iconSrc;
 
-  eyeDiv.append(eyeIcon);
-  editDiv.append(editIcon);
-  trashDiv.append(trashIcon);
-  cell.append(trashDiv, editDiv, eyeDiv);
+    if (item.action) {
+      element.addEventListener("click", () => item.action(id, index));
+    }
+    
+    element.append(icon);
+    cell.append(element);
+  });
 }
 
 // Delete task from tr and localstorage
